@@ -1,7 +1,7 @@
 <script setup>
 import JSONLab from './components/JSONLab.vue'
 import BHeader from './components/BHeader.vue'
-import LibraryRegistrationForm from './components/LibraryRegistrationForm.vue'
+import LibraryRegistrationForm from './views/HomeView.vue'
 </script>
 
 <template>
@@ -9,13 +9,26 @@ import LibraryRegistrationForm from './components/LibraryRegistrationForm.vue'
     <BHeader />
   </header>
 
-  <main>
-    <LibraryRegistrationForm />
+  <main class="page">
+    <!-- <LibraryRegistrationForm />-->
     <!-- <JSONLab /> -->
+    <router-view></router-view>
   </main>
 </template>
 
-<style scoped>
+<style >
+.page {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  max-width: 80vw;
+  margin: 0 auto;
+  padding: 20px;
+  /* background-color: #e0bfbf; */
+  border-radius: 10px;
+}
+.page h1,
+.page p {
+  text-align: center;
+}
 /* header {
   line-height: 1.5;
 }

@@ -92,7 +92,7 @@ const validateReason = () => {
 </script>
 
 <template>
-  <div class="container mt-5">
+  <div class=" mt-5">
     <div class="row">
       <div class="col-md-8 offset-md-2">
         <h1 class="text-center">🗄️ W4. Library Registration Form</h1>
@@ -222,14 +222,7 @@ const validateReason = () => {
 </template>
 
 <style scoped>
-.container {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  max-width: 80vw;
-  margin: 0 auto;
-  padding: 20px;
-  /* background-color: #e0bfbf; */
-  border-radius: 10px;
-}
+
 
 /* Class selectors */
 .form {
