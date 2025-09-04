@@ -37,6 +37,9 @@ const validatePassword = (blur) => {
   }
 }
 
+const checkCredentials = (email, password) => {
+  return email === hardcodedUser.email && password === hardcodedUser.password
+}
 
 const submitLogin = () => {
   validateEmail(true)
@@ -44,8 +47,7 @@ const submitLogin = () => {
 
   if (!errors.value.email && !errors.value.password) {
     if (
-      LoginData.value.email === hardcodedUser.email &&
-      LoginData.value.password === hardcodedUser.password
+      checkCredentials(LoginData.value.email, LoginData.value.password)
     ) {
       isAuthenticated.value = true
       errors.value.login = null
@@ -68,17 +70,21 @@ const clearForm = () => {
     <div class="row">
       <div class="col-md-8 offset-md-2">
         
-
+      <div class="row mb-3">
+        <div class="col-md-8 offset-md-2">
         <h1>Login</h1>
         <p>
           Login with your registered email and password. Authenticated users can access restricted pages; unauthenticated users will be redirected to the login page.
         </p>
+        </div>
+      </div>
 
 
         <form @submit.prevent="submitLogin">
           
       
           <div class="row mb-3">
+            <div class="col-md-8 offset-md-2">
             <label for="email" class="form-label">Email</label>
             <input
               id="email"
@@ -90,9 +96,11 @@ const clearForm = () => {
             />
             <p v-if="errors.email" class="text-danger">{{ errors.email }}</p>
           </div>
+            </div>
 
       
           <div class="row mb-3">
+            <div class="col-md-8 offset-md-2">
             <label for="password" class="form-label">Password</label>
             <input
               id="password"
@@ -103,6 +111,7 @@ const clearForm = () => {
               @input="() => validatePassword(false)"
             />
             <p v-if="errors.password" class="text-danger">{{ errors.password }}</p>
+          </div>
           </div>
 
          
