@@ -1,21 +1,48 @@
+<script setup>
+import { useRouter } from 'vue-router'
+import { isAuthenticated, userEmail, logout } from '../stores/auth' 
+
+const router = useRouter()
+
+const doLogout = () => {
+  logout()           
+  router.push('/login')
+}
+</script>
+
+
+
 <template>
   <!-- Using Bootstrap's Header template (starter code) -->
   <!-- https://getbootstrap.com/docs/5.0/examples/headers/ -->
   <div class="page">
     <header class="d-flex justify-content-center py-3">
-      <ul class="nav nav-pills">
+      <ul class="nav nav-pills gap-3">
         <li class="nav-item">
-          <router-link to="/" class="nav-link" active-class="active" aria-current="page"
+          <router-link to="/home" class="nav-link" active-class="active" aria-current="page"
             >Home</router-link
           >
         </li>
-        <li class="nav-item">
+        <li class="nav-item" v-if="isAuthenticated">
           <router-link to="/about" class="nav-link" active-class="active">About</router-link>
         </li>
-        <li class="nav-item">
+        <li class="nav-item" v-if="!isAuthenticated">
           <router-link to="/login" class="nav-link" active-class="active">Login</router-link>
         </li>
+        <li class="nav-item" v-else>
+          <button type="button" class="nav-link btn btn-link" @click="doLogout">
+            Logout
+          </button>
+        </li>
+        <li class="nav-item ms-3 text-success" style="max-width: 120px;">
+  <span class="text-break">
+    Hello, <span class="email-wrap">{{ userEmail }}</span> 
+  </span>
+</li>
       </ul>
+
+  
+
     </header>
   </div>
 </template>

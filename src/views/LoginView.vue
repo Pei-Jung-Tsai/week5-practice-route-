@@ -1,6 +1,10 @@
 <script setup>
 import { ref } from 'vue'
+import { useRouter, useRoute } from 'vue-router'   
+import { login } from '../stores/auth'              
 
+const router = useRouter() 
+const route = useRoute() 
 
 const LoginData = ref({
   email: '',
@@ -17,9 +21,6 @@ const errors = ref({
   password: null,
   login: null
 })
-
-const isAuthenticated = ref(false)
-
 
 const validateEmail = (blur) => {
   if (!LoginData.value.email) {
@@ -49,8 +50,16 @@ const submitLogin = () => {
     if (
       checkCredentials(LoginData.value.email, LoginData.value.password)
     ) {
-      isAuthenticated.value = true
+
       errors.value.login = null
+
+      /* store login status in localstorage*/
+      login(LoginData.value.email)
+
+      /* go to which page after login*/
+      const redirect = route.query.redirect || '/about'
+      router.push(redirect)
+
       alert('Login successful!')
     } else {
       errors.value.login = 'Email or password is wrong!'
@@ -126,10 +135,6 @@ const clearForm = () => {
           </p>
         </form>
 
-        
-        <div v-if="isAuthenticated" class="mt-3 text-success">
-          You are logged in!
-        </div>
 
       </div>
     </div>
