@@ -10,9 +10,7 @@ const doLogout = () => {
 }
 </script>
 
-
-
-<template>
+<template> 
   <!-- Using Bootstrap's Header template (starter code) -->
   <!-- https://getbootstrap.com/docs/5.0/examples/headers/ -->
   <div class="page">
@@ -22,6 +20,12 @@ const doLogout = () => {
           <router-link to="/home" class="nav-link" active-class="active" aria-current="page"
             >Home</router-link
           >
+        </li>
+        <li class="nav-item" >
+          <router-link to="/FirebaseRegister" class="nav-link" active-class="active">Firebase Register</router-link>
+        </li>
+         <li class="nav-item" >
+          <router-link to="/FireLogin" class="nav-link" active-class="active">Firebase Login</router-link>
         </li>
         <li class="nav-item" v-if="isAuthenticated">
           <router-link to="/about" class="nav-link" active-class="active">About</router-link>
@@ -34,7 +38,7 @@ const doLogout = () => {
             Logout
           </button>
         </li>
-        <li class="nav-item ms-3 text-success" style="max-width: 120px;">
+        <li v-if="isAuthenticated" class="nav-item ms-3 text-success" style="max-width: 120px;">
   <span class="text-break">
     Hello, <span class="email-wrap">{{ userEmail }}</span> 
   </span>

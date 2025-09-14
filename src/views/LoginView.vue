@@ -1,10 +1,18 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter, useRoute } from 'vue-router'   
-import { login } from '../stores/auth'              
+import { login } from '../stores/auth'  
+import { onMounted } from 'vue'            
 
 const router = useRouter() 
 const route = useRoute() 
+
+onMounted(() => {
+  if (route.query.reason === 'denied') {
+    alert(`Access denied. Please log in to continue to ${route.query.redirect || ''}`)
+    router.replace({ query: { ...route.query, reason: undefined } })
+  }
+})
 
 const LoginData = ref({
   email: '',

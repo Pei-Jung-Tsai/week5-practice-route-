@@ -2,9 +2,19 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import AboutView from '../views/AboutView.vue'
 import LoginView from '../views/LoginView.vue'
+import FirebaseSigninView from '../views/FirebaseSigninView.vue'
+import FirebaseRegisterView from '../views/FirebaseRegisterView.vue'
 import { isAuthenticated } from '../stores/auth'
 
 const routes = [
+  {path:'/FirebaseRegister',
+    name: 'FirebaseRegister',
+    component: FirebaseRegisterView
+  },
+  {path:'/FireLogin',
+    name: 'FireLogin',
+    component: FirebaseSigninView
+  },
   { path: '/',
     redirect: '/home' },
   {
@@ -35,7 +45,7 @@ const router = createRouter({
 /* before routing, check do the page need login and login status*/ 
 router.beforeEach((to) => {
   if (to.meta.requiresAuth && !isAuthenticated.value) {
-    return { name: 'Login', query: { redirect: to.fullPath } }
+    return { name: 'Login', query: { reason: 'denied', redirect: to.fullPath } }
   }
 })
 
