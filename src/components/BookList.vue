@@ -86,8 +86,11 @@ async function remove(id) {
       await deleteDoc(doc(db, 'books', id))
      
     }
-},
+return {
+      books,
+      editingId, editName, editIsbn,
+      startEdit, cancel, save, remove,
+    }
+  },
 }
-
 </script>
-
