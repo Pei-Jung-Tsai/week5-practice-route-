@@ -1,14 +1,27 @@
 <script setup>
 import { useRouter } from 'vue-router'
 import { useAuth } from '../authentication/useAuth'   
-
+import { getAuth, onAuthStateChanged } from 'firebase/auth'
 const router = useRouter()
 const { user, role, logout } = useAuth()
 
 async function handleLogout() {
+  const auth = getAuth()
   await logout()
-  router.push('/FireLogin')                          
-}
+  await new Promise(resolve => {
+    const unsub = onAuthStateChanged(auth, () => { unsub(); resolve() })
+  })
+
+  console.log('Firebase logout Successful!', {
+    authCurrentUser: auth.currentUser,  
+    userRef: user.value,                
+    role: role.value                  
+  })
+
+  alert('You have been signed out.')
+  router.replace('/FireLogin')
+}                         
+
 </script>
 
 <template> 

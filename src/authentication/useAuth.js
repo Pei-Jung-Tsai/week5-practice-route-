@@ -1,6 +1,6 @@
 import { ref } from 'vue'
-import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth'              // 來源：firebase/auth
-import { doc, onSnapshot } from 'firebase/firestore'                              // 來源：firebase/firestore
+import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth'              
+import { doc, onSnapshot } from 'firebase/firestore'                             
 import db from '../firebase/init.js'
 
 // global status 
@@ -33,7 +33,8 @@ export function useAuth() {
     })
   }
   async function logout() {
-    await signOut(auth)  
+    await signOut(auth) 
+     
   }
 
   return { user, role, loading, initAuthListener, logout }
