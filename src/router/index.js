@@ -4,8 +4,8 @@ import AboutView from '../views/AboutView.vue'
 import LoginView from '../views/LoginView.vue'
 import FirebaseSigninView from '../views/FirebaseSigninView.vue'
 import FirebaseRegisterView from '../views/FirebaseRegisterView.vue'
-import { isAuthenticated } from '../stores/auth'
 import AddBookView from '../views/AddBookView.vue'
+import { useAuth } from '../authentication/useAuth'
 
 const routes = [
   {path:'/FirebaseRegister',
@@ -23,9 +23,10 @@ const routes = [
     name: 'Home',
     component: HomeView
   },
-  {path:'/addbook',
+  { path:'/addbook',
     name: 'AddBook',
-    component: AddBookView
+    component: AddBookView,
+    meta: { requiresAuth: true, roles: ['admin']}
   },
   {
     path: '/about',
@@ -47,11 +48,21 @@ const router = createRouter({
   routes
 })
 
-/* before routing, check do the page need login and login status*/ 
-router.beforeEach((to) => {
-  if (to.meta.requiresAuth && !isAuthenticated.value) {
-    return { name: 'Login', query: { reason: 'denied', redirect: to.fullPath } }
+
+router.beforeEach((to, from, next) => {
+  const { user, role, loading } = useAuth() 
+  if (loading.value) return next()
+    
+  if (to.meta?.requiresAuth && !user.value) {
+    return next({ path: '/FireLogin', query: { redirect: to.fullPath } })
   }
+
+  if (to.meta?.roles && user.value) {
+    const ok = to.meta.roles.includes(role.value || '')
+    if (!ok) return next('/forbidden') 
+  }
+
+  next()
 })
 
 export default router

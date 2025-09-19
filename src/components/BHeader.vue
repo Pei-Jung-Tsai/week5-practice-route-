@@ -1,12 +1,13 @@
 <script setup>
 import { useRouter } from 'vue-router'
-import { isAuthenticated, userEmail, logout } from '../stores/auth' 
+import { useAuth } from '../authentication/useAuth'   
 
 const router = useRouter()
+const { user, role, logout } = useAuth()
 
-const doLogout = () => {
-  logout()           
-  router.push('/login')
+async function handleLogout() {
+  await logout()
+  router.push('/FireLogin')                          
 }
 </script>
 
@@ -16,39 +17,28 @@ const doLogout = () => {
   <div class="page">
     <header class="d-flex justify-content-center py-3">
       <ul class="nav nav-pills gap-3">
-        <li class="nav-item">
-          <router-link to="/home" class="nav-link" active-class="active" aria-current="page"
-            >Home</router-link
-          >
-        </li>
-        <li class="nav-item" >
-          <router-link to="/FirebaseRegister" class="nav-link" active-class="active">Firebase Register</router-link>
-        </li>
-         <li class="nav-item" >
-          <router-link to="/FireLogin" class="nav-link" active-class="active">Firebase Login</router-link>
-        </li>
-        <li class="nav-item" >
-          <router-link to="/about" class="nav-link" active-class="active">About</router-link>
-        </li>
-        <li class="nav-item" >
+        <li class="nav-item" v-if="user && role === 'admin'" >
           <router-link to="/addbook" class="nav-link" active-class="active">Add book</router-link>
         </li>
-        <li class="nav-item" v-if="!isAuthenticated">
-          <router-link to="/login" class="nav-link" active-class="active">Login</router-link>
+        <li class="nav-item">
+          <router-link to="/home" class="nav-link" active-class="active" aria-current="page"
+            >Home</router-link>
+        </li>
+         <li class="nav-item" v-if="user" >
+          <router-link to="/about" class="nav-link" active-class="active">About</router-link>
+        </li>
+        <li class="nav-item" v-if="!user" >
+          <router-link to="/FirebaseRegister" class="nav-link" active-class="active">Firebase Register</router-link>
+        </li>
+         <li class="nav-item" v-if="!user" >
+          <router-link to="/FireLogin" class="nav-link" active-class="active">Firebase Login</router-link>
         </li>
         <li class="nav-item" v-else>
-          <button type="button" class="nav-link btn btn-link" @click="doLogout">
-            Logout
-          </button>
+          <span>Hi, {{ user.email }} ({{ role || '…' }})</span>
+        <button @click="handleLogout">Logout</button>
         </li>
-        <li v-if="isAuthenticated" class="nav-item ms-3 text-success" style="max-width: 120px;">
-  <span class="text-break">
-    Hello, <span class="email-wrap">{{ userEmail }}</span> 
-  </span>
-</li>
+       
       </ul>
-
-  
 
     </header>
   </div>
