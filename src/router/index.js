@@ -52,11 +52,13 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   const { user, role, loading } = useAuth() 
   if (loading.value) return next()
-    
+
+  // need but not login, direct ro login page
   if (to.meta?.requiresAuth && !user.value) {
     return next({ path: '/FireLogin', query: { redirect: to.fullPath } })
   }
-
+  
+  // only admin can access, show error
   if (to.meta?.roles && user.value) {
     const ok = to.meta.roles.includes(role.value || '')
     if (!ok) return next('/forbidden') 
