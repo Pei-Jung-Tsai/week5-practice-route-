@@ -37,36 +37,28 @@ export default {
     const editingId = ref(null)
     const editName  = ref('')
     const editIsbn  = ref(null)
-    
-    const fetchBooks = async () => {
-      try {
-        const q = query(
-          collection(db, 'books'),  //collection
-          where('isbn', '>', 1000) // filter, return targeted document
-        ) //  make it query object
 
-        const querySnapshot = await getDocs(q) 
+    let unsubscribe = null
 
-        const booksArray = []
-        querySnapshot.forEach((doc) => {
-          booksArray.push({ id: doc.id, ...doc.data() })
-        })
+    onMounted(() => {     
+      const q = query(
+        collection(db, 'books'),        // targeted collection
+        where('isbn', '>=', 1000),      // filter, targeted documents
+        orderBy('isbn', 'asc'),         // order
+        limitBy(20)                     // limitation of number to get back
+      )
 
-        books.value = booksArray
-      } catch (error) {
-        console.error('Error fetching books: ', error)
-      }
-    }
-
-    onMounted(() => {
-      fetchBooks()
+      unsubscribe = onSnapshot(q, (snap) => {
+        books.value = snap.docs.map(d => ({ id: d.id, ...d.data() }))
+      }, (err) => {
+        console.error('onSnapshot error:', err)
+      })
     })
 
-    return {
-      books,
-    }
-  },
-}
+    onBeforeUnmount(() => {
+      if (unsubscribe) unsubscribe()
+    })
+
 function startEdit(b) {
       editingId.value = b.id
       editName.value  = b.name ?? ''
