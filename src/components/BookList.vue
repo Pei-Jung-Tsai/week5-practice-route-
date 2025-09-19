@@ -59,17 +59,35 @@ export default {
       if (unsubscribe) unsubscribe()
     })
 
-function startEdit(b) {
-      editingId.value = b.id
-      editName.value  = b.name ?? ''
-      editIsbn.value  = b.isbn ?? null
+function startEdit(book) {
+      editingId.value = book.id
+      editName.value  = book.name ?? ''
+      editIsbn.value  = book.isbn ?? null
     }
+function cancel() {
+      editingId.value = null
+      editName.value  = ''
+      editIsbn.value  = null
+    }
+async function save(id) {
+      const n = Number(editIsbn.value)
+      if (Number.isNaN(n)) return alert('ISBN must be a number')
 
+      await updateDoc(doc(db, 'books', id), {
+        name: editName.value,
+        isbn: n,
+        updatedAt: serverTimestamp(),   
+      })
+      
+      cancel()
+    }
 async function remove(id) {
       if (!confirm('Delete this book?')) return
       await deleteDoc(doc(db, 'books', id))
      
     }
+},
+}
 
 </script>
 
