@@ -24,11 +24,11 @@
 </template>
 
 <script>
-import { ref, onMounted, onBeforeUnmount } from 'vue'                  // 🟩 來源：vue
-import db from '../firebase/init.js'                                    // 你的 Firestore 實例
+import { ref, onMounted, onBeforeUnmount } from 'vue'                  
+import db from '../firebase/init.js'                                    
 import {
-  collection, query, where, orderBy, limit as limitBy, onSnapshot,     // 🟩 來源：firebase/firestore（查詢 + 監聽）
-  doc, updateDoc, deleteDoc, serverTimestamp                           // 🟩 來源：firebase/firestore（更新/刪除）
+  collection, query, where, orderBy, limit as limitBy, onSnapshot,     
+  doc, updateDoc, deleteDoc, serverTimestamp                           
 } from 'firebase/firestore'
 
 export default {
@@ -45,7 +45,7 @@ export default {
         collection(db, 'books'),        // targeted collection
         where('isbn', '>=', 1000),      // filter, targeted documents
         orderBy('isbn', 'asc'),         // order
-        limitBy(20)                     // limitation of number to get back
+        limitBy(5)                     // limitation of number to get back
       )
 
       unsubscribe = onSnapshot(q, (snap) => {
@@ -58,17 +58,20 @@ export default {
     onBeforeUnmount(() => {
       if (unsubscribe) unsubscribe()
     })
-
+    
 function startEdit(book) {
       editingId.value = book.id
       editName.value  = book.name ?? ''
       editIsbn.value  = book.isbn ?? null
     }
+
 function cancel() {
       editingId.value = null
       editName.value  = ''
       editIsbn.value  = null
     }
+
+    // update document
 async function save(id) {
       const n = Number(editIsbn.value)
       if (Number.isNaN(n)) return alert('ISBN must be a number')
@@ -81,6 +84,7 @@ async function save(id) {
       
       cancel()
     }
+    // delete document
 async function remove(id) {
       if (!confirm('Delete this book?')) return
       await deleteDoc(doc(db, 'books', id))
