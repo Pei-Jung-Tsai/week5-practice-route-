@@ -5,6 +5,7 @@ import LoginView from '../views/LoginView.vue'
 import FirebaseSigninView from '../views/FirebaseSigninView.vue'
 import FirebaseRegisterView from '../views/FirebaseRegisterView.vue'
 import AddBookView from '../views/AddBookView.vue'
+import GetBookCountView from '../views/GetBookCountView.vue'
 import { useAuth } from '../authentication/useAuth'
 
 const routes = [
@@ -41,6 +42,11 @@ const routes = [
   },
   { path: '/:pathMatch(.*)*',
     redirect: '/home' },
+    {
+    path: '/GetBookCount',
+    name: 'GetBookCount',
+    component: GetBookCountView
+  },
 ]
 
 const router = createRouter({
