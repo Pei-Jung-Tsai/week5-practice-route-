@@ -43,6 +43,9 @@ async function handleLogout() {
          <li class="nav-item" v-if="user" >
           <router-link to="/GetBookCount" class="nav-link" active-class="active">Get Book Count</router-link>
         </li>
+        <li class="nav-item" v-if="user" >
+          <router-link to="/WeatherCheck" class="nav-link" active-class="active">Get Weather</router-link>
+        </li>
         <li class="nav-item" v-if="!user" >
           <router-link to="/FirebaseRegister" class="nav-link" active-class="active">Firebase Register</router-link>
         </li>
